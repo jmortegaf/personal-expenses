@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/java/com/jmortegaf/personal_expenses/Console.java
+/src/main/resources/application-dev.properties
+/data/testdb.mv.db
+/data/testdb.trace.db
