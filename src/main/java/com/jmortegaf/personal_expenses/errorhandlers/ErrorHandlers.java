@@ -1,5 +1,8 @@
 package com.jmortegaf.personal_expenses.errorhandlers;
 
+import com.jmortegaf.personal_expenses.dto.ErrorData;
+import com.jmortegaf.personal_expenses.exceptions.InvalidAccountDataException;
+import com.jmortegaf.personal_expenses.exceptions.InvalidExpenseException;
 import com.jmortegaf.personal_expenses.exceptions.InvalidUserDataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +26,7 @@ public class ErrorHandlers {
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<?> noHandlerFoundHandler(NoHandlerFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Map.of("error", "Not Found", "message",
-                        "The requested endpoint doesnt exist"));
+                .body(new ErrorData("Not Found","The requested endpoint doesnt exist").getBody());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -33,5 +35,17 @@ public class ErrorHandlers {
                 .body(Map.of("error","Bad Request",
                         "message",e.getFieldErrors().stream()
                                 .map(error->error.getField()+" "+error.getDefaultMessage()).findFirst()));
+    }
+
+    @ExceptionHandler(InvalidAccountDataException.class)
+    public ResponseEntity<?> invalidAccountDataHandler(InvalidAccountDataException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorData("Bad Request",e.getMessage()).getBody());
+    }
+
+    @ExceptionHandler(InvalidExpenseException.class)
+    public ResponseEntity<?> invalidExpenseHandler(InvalidExpenseException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorData("Bad Request",e.getMessage()).getBody());
     }
 }

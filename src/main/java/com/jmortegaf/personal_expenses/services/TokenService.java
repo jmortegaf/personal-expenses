@@ -29,7 +29,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             return JWT.create()
-                    .withIssuer("alura-forohub")
+                    .withIssuer(jwtTokenIssuer)
                     .withSubject(user.getUsername())
                     .withClaim("id",user.getId())
                     .withExpiresAt(generateExpirationDate())

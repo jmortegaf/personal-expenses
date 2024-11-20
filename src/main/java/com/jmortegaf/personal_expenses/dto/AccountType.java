@@ -1,5 +1,7 @@
 package com.jmortegaf.personal_expenses.dto;
 
+import com.jmortegaf.personal_expenses.exceptions.InvalidAccountDataException;
+
 public enum AccountType {
 
     CREDIT("Credit"),
@@ -16,6 +18,6 @@ public enum AccountType {
             if(type.accountType.equalsIgnoreCase(text))
                 return type;
         }
-        throw new IllegalArgumentException("Invalid account type: "+text);
+        throw new InvalidAccountDataException("Invalid account type");
     }
 }
