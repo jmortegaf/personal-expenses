@@ -1,7 +1,6 @@
 package com.jmortegaf.personal_expenses.controllers;
 
 import com.jmortegaf.personal_expenses.dto.UserData;
-import com.jmortegaf.personal_expenses.repositories.UserRepository;
 import com.jmortegaf.personal_expenses.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService){
         this.userService=userService;

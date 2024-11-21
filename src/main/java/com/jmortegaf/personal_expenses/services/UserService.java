@@ -15,7 +15,7 @@ import java.util.Map;
 public class UserService {
 
     private final UserRepository userRepository;
-    private List<UserRegisterValidator> userRegisterValidators;
+    private final List<UserRegisterValidator> userRegisterValidators;
     private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder,

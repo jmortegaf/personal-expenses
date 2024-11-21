@@ -4,5 +4,5 @@ import com.jmortegaf.personal_expenses.dto.UserData;
 
 public interface UserRegisterValidator {
 
-    public void validate(UserData userData);
+    void validate(UserData userData);
 }

@@ -1,30 +1,33 @@
 package com.jmortegaf.personal_expenses.models;
 
 import com.jmortegaf.personal_expenses.dto.CreditExpenseData;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 @Entity
+@Table(name = "credit_expenses")
 public class CreditExpense extends Expense{
 
-    @ManyToOne
-    private Account account;
     private Integer paymentsNumber;
     private Double paymentAmount;
     private LocalDateTime firstPaymentDate;
 
     public CreditExpense(Account account,CreditExpenseData creditExpenseData) {
-        super(creditExpenseData.expenseDate(),creditExpenseData.getExpenseTotal(),creditExpenseData.expenseDescription());
+        super(account,creditExpenseData.expenseDate(),creditExpenseData.getExpenseTotal(),creditExpenseData.expenseDescription());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-        this.account=account;
         paymentsNumber= creditExpenseData.paymentsNumber();
-        paymentAmount= creditExpenseData.paymentValue();
+        paymentAmount= creditExpenseData.paymentAmount();
         firstPaymentDate=LocalDateTime.parse(creditExpenseData.firstPaymentDate(),formatter);
     }
 }

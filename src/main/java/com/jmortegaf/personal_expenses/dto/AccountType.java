@@ -7,7 +7,7 @@ public enum AccountType {
     CREDIT("Credit"),
     DEBIT("Debit");
 
-    private String accountType;
+    private final String accountType;
 
 
     AccountType(String accountType){

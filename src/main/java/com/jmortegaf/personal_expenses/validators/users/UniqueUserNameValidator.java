@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UniqueUserNameValidator implements UserRegisterValidator {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UniqueUserNameValidator(UserRepository userRepository){
         this.userRepository=userRepository;

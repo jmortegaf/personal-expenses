@@ -26,7 +26,7 @@ public class ErrorHandlers {
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<?> noHandlerFoundHandler(NoHandlerFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorData("Not Found","The requested endpoint doesnt exist").getBody());
+                .body(new ErrorData("Not Found","The requested endpoint doesn't exist").getBody());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

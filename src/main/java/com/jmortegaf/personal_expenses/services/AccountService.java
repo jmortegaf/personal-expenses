@@ -59,11 +59,25 @@ public class AccountService {
     public ResponseData addCreditExpense(@Valid Long id, @Valid CreditExpenseData creditExpenseData) {
         var query = accountRepository.findById(id);
         if(query.isPresent()){
-            var account=(CreditAccount)query.get();
-            addExpenseValidators.forEach(validator->validator.validate(null,account,creditExpenseData));
-            account.addExpense(creditExpenseData);
-            return new ResponseData(HttpStatus.OK,"Ok","Expense added successfully");
+            if(query.get() instanceof CreditAccount account){
+                addExpenseValidators.forEach(validator->validator.validate(null,account,creditExpenseData));
+                account.addExpense(creditExpenseData);
+                return new ResponseData(HttpStatus.OK,"Ok","Expense added successfully");
+            }
         }
         throw new InvalidAccountDataException("Account doesn't exists");
     }
+
+    @Transactional
+    public ResponseData addCreditPayment(@Valid Long id, @Valid CreditPaymentData creditPaymentData) {
+        var query = accountRepository.findById(id);
+        if(query.isPresent()){
+            if(query.get() instanceof CreditAccount account){
+                account.addPayment(creditPaymentData);
+                return new ResponseData(HttpStatus.OK,"Ok","Payment added successfully");
+            }
+        }
+        throw new InvalidAccountDataException("Account doesn't exists");
+    }
+
 }

@@ -25,8 +25,6 @@ import java.util.List;
 @Entity(name = "users")
 public class User implements UserDetails {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,7 +37,6 @@ public class User implements UserDetails {
         userEmail=userData.userEmail();
         userPassword=hashedPassword;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

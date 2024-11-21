@@ -1,6 +1,5 @@
 package com.jmortegaf.personal_expenses.dto;
 
-import com.jmortegaf.personal_expenses.models.CreditAccount;
 import com.jmortegaf.personal_expenses.models.DebitAccount;
 
 public record DebitAccountData(
