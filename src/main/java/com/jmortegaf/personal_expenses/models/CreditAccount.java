@@ -31,8 +31,8 @@ public class CreditAccount extends Account{
     private List<CreditPayment> paymentList;
 
 
-    public CreditAccount(String accountName) {
-        super(accountName);
+    public CreditAccount(String accountName, User user) {
+        super(accountName,user);
         creditLimit=0.0;
         usedCredit=0.0;
         closingDate=1;

@@ -1,10 +1,7 @@
 package com.jmortegaf.personal_expenses.models;
 
 import com.jmortegaf.personal_expenses.dto.UserData;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +28,9 @@ public class User implements UserDetails {
     private String userName;
     private String userEmail;
     private String userPassword;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Account> accounts;
 
     public User(@Valid UserData userData, String hashedPassword) {
         userName=userData.userName();

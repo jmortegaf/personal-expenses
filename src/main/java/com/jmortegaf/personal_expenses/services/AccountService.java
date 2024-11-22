@@ -1,5 +1,6 @@
 package com.jmortegaf.personal_expenses.services;
 
+import com.jmortegaf.personal_expenses.components.UtilsComponent;
 import com.jmortegaf.personal_expenses.dto.*;
 import com.jmortegaf.personal_expenses.exceptions.InvalidAccountDataException;
 import com.jmortegaf.personal_expenses.models.Account;
@@ -17,25 +18,28 @@ import java.util.List;
 @Service
 public class AccountService {
 
+    private final UtilsComponent utilsComponent;
     private final AccountRepository accountRepository;
     private final List<AddExpenseValidator> addExpenseValidators;
 
-    public AccountService(AccountRepository accountRepository,
+    public AccountService(UtilsComponent utilsComponent,AccountRepository accountRepository,
                           List<AddExpenseValidator> addExpenseValidators){
 
+        this.utilsComponent=utilsComponent;
         this.accountRepository=accountRepository;
         this.addExpenseValidators=addExpenseValidators;
     }
 
     public ResponseData createAccount(@Valid CreateAccountData createAccountData){
         Account account;
+        var user=utilsComponent.getUser();
         switch (AccountType.fromString(createAccountData.accountType())){
             case CREDIT:
-                account=new CreditAccount(createAccountData.accountName());
+                account=new CreditAccount(createAccountData.accountName(),user);
                 accountRepository.save(account);
                 break;
             case DEBIT:
-                account=new DebitAccount(createAccountData.accountName());
+                account=new DebitAccount(createAccountData.accountName(),user);
                 accountRepository.save(account);
                 break;
             default:

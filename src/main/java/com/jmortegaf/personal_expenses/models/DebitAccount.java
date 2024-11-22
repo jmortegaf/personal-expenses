@@ -16,8 +16,8 @@ public class DebitAccount extends Account{
 
     private Double balance;
 
-    public DebitAccount(String accountName) {
-        super(accountName);
-        balance=0.0;
+    public DebitAccount(String accountName, User user) {
+        super(accountName, user);
+        balance = 0.0;
     }
 }

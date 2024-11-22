@@ -18,13 +18,17 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getUsers(){
-        System.out.println("hi");
         return ResponseEntity.ok(userService.getUsers());
     }
 
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody @Valid UserData userData){
         return ResponseEntity.ok(userService.createUser(userData));
+    }
+
+    @GetMapping("/balance")
+    public ResponseEntity<?> getUserBalance(){
+        return ResponseEntity.ok(userService.getUserBalance());
     }
 
 

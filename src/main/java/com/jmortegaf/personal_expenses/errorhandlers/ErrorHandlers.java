@@ -4,6 +4,7 @@ import com.jmortegaf.personal_expenses.dto.ErrorData;
 import com.jmortegaf.personal_expenses.exceptions.InvalidAccountDataException;
 import com.jmortegaf.personal_expenses.exceptions.InvalidExpenseException;
 import com.jmortegaf.personal_expenses.exceptions.InvalidUserDataException;
+import com.jmortegaf.personal_expenses.exceptions.UserAuthenticationErrorException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -47,5 +48,11 @@ public class ErrorHandlers {
     public ResponseEntity<?> invalidExpenseHandler(InvalidExpenseException e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorData("Bad Request",e.getMessage()).getBody());
+    }
+
+    @ExceptionHandler(UserAuthenticationErrorException.class)
+    public ResponseEntity<?> userAuthenticationErrorHandler(UserAuthenticationErrorException e){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorData("Unauthorized",e.getMessage()).getBody());
     }
 }

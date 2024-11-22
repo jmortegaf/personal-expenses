@@ -29,6 +29,8 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getAccount(id));
     }
 
+    // CREDIT
+
     @PostMapping("/credit/add-expense/{id}")
     public ResponseEntity<?> addCreditExpense(@PathVariable @Valid Long id,
                                               @RequestBody @Valid CreditExpenseData creditExpenseData){
@@ -42,5 +44,9 @@ public class AccountController {
         var result=accountService.addCreditPayment(id,creditPaymentData);
         return ResponseEntity.status(result.statusCode()).body(result.getBody());
     }
+
+    // DEBIT
+
+//    @PostMapping("/debit/add-expense/{id}")
 
 }

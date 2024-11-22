@@ -21,8 +21,15 @@ public class Account {
     private String accountName;
     private Boolean active;
 
-    public Account(String accountName){
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
+
+
+
+    public Account(String accountName, User user){
         this.accountName=accountName;
+        this.user=user;
         this.active=false;
     }
 

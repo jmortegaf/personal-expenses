@@ -35,3 +35,4 @@ build/
 /src/main/resources/application-dev.properties
 /data/testdb.mv.db
 /data/testdb.trace.db
+/src/main/resources/flyway.conf
