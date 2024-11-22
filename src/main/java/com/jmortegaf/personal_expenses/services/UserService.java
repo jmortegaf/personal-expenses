@@ -4,6 +4,9 @@ import com.jmortegaf.personal_expenses.components.UtilsComponent;
 import com.jmortegaf.personal_expenses.dto.BalanceData;
 import com.jmortegaf.personal_expenses.dto.UserData;
 import com.jmortegaf.personal_expenses.exceptions.InvalidAccountDataException;
+import com.jmortegaf.personal_expenses.models.Account;
+import com.jmortegaf.personal_expenses.models.CreditAccount;
+import com.jmortegaf.personal_expenses.models.DebitAccount;
 import com.jmortegaf.personal_expenses.models.User;
 import com.jmortegaf.personal_expenses.repositories.AccountRepository;
 import com.jmortegaf.personal_expenses.repositories.UserRepository;
@@ -50,7 +53,29 @@ public class UserService {
     public BalanceData getUserBalance() {
         var user=utilsComponent.getUser();
         var accounts=accountRepository.findByUserId(user.getId());
-        System.out.println(accounts);
-        throw new InvalidAccountDataException("Error");
+        return formatBalance(accounts);
+    }
+
+    private static BalanceData formatBalance(List<Account> accounts){
+        double debitBalance = 0d;
+        double totalCreditLimit = 0d;
+        double totalCreditUsed = 0d;
+        debitBalance = accounts.stream().mapToDouble(account -> {
+            if (account instanceof DebitAccount)
+                return ((DebitAccount) account).getBalance();
+            return 0d;
+        }).sum();
+        totalCreditLimit=accounts.stream().mapToDouble(account->{
+            if(account instanceof CreditAccount)
+                return ((CreditAccount) account).getCreditLimit();
+            return 0d;
+        }).sum();
+        totalCreditUsed=accounts.stream().mapToDouble(account->{
+            if(account instanceof CreditAccount)
+                return ((CreditAccount) account).getUsedCredit();
+            return 0d;
+        }).sum();
+        return new BalanceData(debitBalance,totalCreditLimit-totalCreditUsed,
+                totalCreditLimit,totalCreditUsed);
     }
 }
