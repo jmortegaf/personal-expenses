@@ -3,16 +3,14 @@ package com.jmortegaf.personal_expenses.services;
 import com.jmortegaf.personal_expenses.components.UtilsComponent;
 import com.jmortegaf.personal_expenses.dto.*;
 import com.jmortegaf.personal_expenses.exceptions.InvalidAccountDataException;
-import com.jmortegaf.personal_expenses.models.Account;
-import com.jmortegaf.personal_expenses.models.CreditAccount;
-import com.jmortegaf.personal_expenses.models.DebitAccount;
+import com.jmortegaf.personal_expenses.models.*;
 import com.jmortegaf.personal_expenses.repositories.AccountRepository;
-import com.jmortegaf.personal_expenses.validators.expenses.credit.AddExpenseValidator;
-import jakarta.transaction.Transactional;
+import com.jmortegaf.personal_expenses.repositories.TransactionRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,14 +18,14 @@ public class AccountService {
 
     private final UtilsComponent utilsComponent;
     private final AccountRepository accountRepository;
-    private final List<AddExpenseValidator> addExpenseValidators;
+    private final TransactionRepository transactionRepository;
 
     public AccountService(UtilsComponent utilsComponent,AccountRepository accountRepository,
-                          List<AddExpenseValidator> addExpenseValidators){
+                          TransactionRepository transactionRepository){
 
         this.utilsComponent=utilsComponent;
         this.accountRepository=accountRepository;
-        this.addExpenseValidators=addExpenseValidators;
+        this.transactionRepository=transactionRepository;
     }
 
     public ResponseData createAccount(@Valid CreateAccountData createAccountData){
@@ -59,29 +57,43 @@ public class AccountService {
         throw new InvalidAccountDataException("Invalid");
     }
 
-    @Transactional
-    public ResponseData addCreditExpense(@Valid Long id, @Valid CreditExpenseData creditExpenseData) {
-        var query = accountRepository.findById(id);
-        if(query.isPresent()){
-            if(query.get() instanceof CreditAccount account){
-                addExpenseValidators.forEach(validator->validator.validate(null,account,creditExpenseData));
-                account.addExpense(creditExpenseData);
-                return new ResponseData(HttpStatus.OK,"Ok","Expense added successfully");
+    public List<TransactionData> getTransactions(@Valid Long id) {
+        var account = accountRepository.findById(id);
+        if (account.isPresent()) {
+            var transactions = transactionRepository.findByAccountId(id);
+            List<TransactionData> transactionsList = new ArrayList<>();
+            if(account.get() instanceof CreditAccount){
+                transactions.forEach(transaction -> {
+                    if (transaction instanceof CreditPayment)
+                        transactionsList.add(new CreditPaymentData((CreditPayment) transaction));
+                    else transactionsList.add(new CreditExpenseData((CreditExpense) transaction));
+                });
             }
+            else{
+                transactions.forEach(transaction -> {
+                    if(transaction instanceof Deposit)
+                        transactionsList.add(new DepositData((Deposit)transaction));
+                    else transactionsList.add(new ExpenseData((Expense)transaction));
+                });
+            }
+            return transactionsList;
         }
-        throw new InvalidAccountDataException("Account doesn't exists");
+        throw new InvalidAccountDataException("The account doesn't exists");
     }
 
-    @Transactional
-    public ResponseData addCreditPayment(@Valid Long id, @Valid CreditPaymentData creditPaymentData) {
-        var query = accountRepository.findById(id);
-        if(query.isPresent()){
-            if(query.get() instanceof CreditAccount account){
-                account.addPayment(creditPaymentData);
-                return new ResponseData(HttpStatus.OK,"Ok","Payment added successfully");
+    public TransactionData getTransaction(@Valid Long id) {
+        var transaction = transactionRepository.findById(id);
+        if (transaction.isPresent()) {
+            if(transaction.get().getAccount() instanceof CreditAccount){
+                return transaction.get() instanceof CreditPayment ?
+                        new CreditPaymentData((CreditPayment) transaction.get()) :
+                        new CreditExpenseData((CreditExpense) transaction.get());
             }
+            return transaction.get() instanceof Deposit ?
+                    new DepositData((Deposit) transaction.get()) :
+                    new ExpenseData((Expense) transaction.get());
         }
-        throw new InvalidAccountDataException("Account doesn't exists");
+        throw new InvalidAccountDataException("The transaction doesn't exists");
     }
 
 }

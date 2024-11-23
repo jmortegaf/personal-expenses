@@ -49,7 +49,7 @@ public class CreditAccount extends Account{
         usedCredit+=creditExpenseData.getExpenseTotal();
     }
 
-    public void addPayment(@Valid CreditPaymentData creditPaymentData) {
+    public void addPayment(CreditPaymentData creditPaymentData) {
         paymentList.add(new CreditPayment(this,creditPaymentData));
         usedCredit-=creditPaymentData.paymentAmount();
     }

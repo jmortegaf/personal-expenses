@@ -1,8 +1,6 @@
 package com.jmortegaf.personal_expenses.controllers;
 
 import com.jmortegaf.personal_expenses.dto.CreateAccountData;
-import com.jmortegaf.personal_expenses.dto.CreditExpenseData;
-import com.jmortegaf.personal_expenses.dto.CreditPaymentData;
 import com.jmortegaf.personal_expenses.services.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -29,24 +27,16 @@ public class AccountController {
         return ResponseEntity.ok(accountService.getAccount(id));
     }
 
-    // CREDIT
-
-    @PostMapping("/credit/add-expense/{id}")
-    public ResponseEntity<?> addCreditExpense(@PathVariable @Valid Long id,
-                                              @RequestBody @Valid CreditExpenseData creditExpenseData){
-        var result=accountService.addCreditExpense(id,creditExpenseData);
-        return ResponseEntity.status(result.statusCode()).body(result.getBody());
+    @GetMapping("/get-transactions/{id}")
+    public ResponseEntity<?> getTransactions(@PathVariable @Valid Long id){
+        var result=accountService.getTransactions(id);
+        return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/credit/add-payment/{id}")
-    public ResponseEntity<?> addCreditPayment(@PathVariable @Valid Long id,
-                                              @RequestBody @Valid CreditPaymentData creditPaymentData){
-        var result=accountService.addCreditPayment(id,creditPaymentData);
-        return ResponseEntity.status(result.statusCode()).body(result.getBody());
+    @GetMapping("/get-transaction/{id}")
+    public ResponseEntity<?> getTransaction(@PathVariable @Valid Long id){
+        var result=accountService.getTransaction(id);
+        return ResponseEntity.ok(result);
     }
-
-    // DEBIT
-
-//    @PostMapping("/debit/add-expense/{id}")
 
 }

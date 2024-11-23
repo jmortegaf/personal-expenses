@@ -5,7 +5,8 @@ import com.jmortegaf.personal_expenses.exceptions.InvalidAccountDataException;
 public enum TransactionType {
 
     EXPENSE("Expense"),
-    PAYMENT("Payment");
+    PAYMENT("Payment"),
+    DEPOSIT("Deposit");
 
     private final String transactionType;
 

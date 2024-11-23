@@ -12,7 +12,7 @@ public record CreditPaymentData(
 
     public CreditPaymentData(CreditPayment creditPayment) {
         this(creditPayment.getAccount().getId(),TransactionType.PAYMENT,creditPayment.getId(),
-                creditPayment.getIncomeAmount(),creditPayment.getTransactionDateTime().toString(),
+                creditPayment.getDepositAmount(),creditPayment.getTransactionDateTime().toString(),
                 creditPayment.getTransactionDescription());
     }
 

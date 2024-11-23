@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "credit_payments")
-public class CreditPayment extends Income{
+public class CreditPayment extends Deposit {
 
     public CreditPayment(Account account, CreditPaymentData creditPaymentData) {
         super(account, creditPaymentData.paymentDateTime(), creditPaymentData.paymentAmount(),creditPaymentData.paymentDescription());
